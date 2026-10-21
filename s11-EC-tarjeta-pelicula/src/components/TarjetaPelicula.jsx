@@ -1,28 +1,34 @@
+import React from 'react'
+
+const REACCIONES = ['👍', '❤️', '😮']
 
 function TarjetaPelicula({ titulo, director }) {
+  const [vista, setVista] = React.useState(false)
+  const [mostrarSinopsis, setMostrarSinopsis] = React.useState(false)
+  const [reaccion, setReaccion] = React.useState(0)
 
-    const handleMarcarVista=()=>{
-        console.log('¡Click en el botón!')
-        console.log('Marcando como vista:', titulo, '-', director)
-        alert(`Has marcado como vista: ${titulo}`)     
-        
-    }
- return (
+const handleReaccionar = () => {
+  setReaccion((prev) => (prev + 1) % REACCIONES.length)
+}
+
+  return (
     <article className="tarjeta-pelicula">
       <h3>{titulo}</h3>
       <p>{director}</p>
       <div className="fila">
-        <button onClick={handleMarcarVista}>Marcar como vista</button>
-      <button
-        onPointerDown={() => console.log('Pulsación iniciada')}
-        onPointerUp={() => console.log('Pulsación terminada')}
-        onPointerEnter={() => console.log('Entró el puntero')}
-        onPointerLeave={() => console.log('Salió el puntero')}
-    >
-      Más información
-    </button> 
+        <button className={vista ? 'is-vista' : ''} onClick={() => setVista(true)} disabled={vista}>
+          {vista ? '✓ Vista' : 'Marcar vista'}
+        </button>
+        <button onClick={() => setMostrarSinopsis(!mostrarSinopsis)}>
+          {mostrarSinopsis ? 'Ocultar sinopsis' : 'Ver sinopsis'}
+        </button>
+        <button onClick={handleReaccionar}>{REACCIONES[reaccion]}</button>
       </div>
+      {mostrarSinopsis && (
+        <p className="sinopsis">Una historia de niebla, faros y decisiones que no se pueden deshacer.</p>
+      )}
     </article>
   )
 }
-export default TarjetaPelicula 
+
+export default TarjetaPelicula
